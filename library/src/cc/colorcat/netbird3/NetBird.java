@@ -1,7 +1,10 @@
 package cc.colorcat.netbird3;
 
 import cc.colorcat.netbird3.internal.Level;
-import cc.colorcat.netbird3.platform.Platform;
+import cc.colorcat.netbird3.platform.AnyLogger;
+import cc.colorcat.netbird3.platform.AnyScheduler;
+import cc.colorcat.netbird3.platform.Logger;
+import cc.colorcat.netbird3.platform.Scheduler;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLSocketFactory;
@@ -20,6 +23,8 @@ import java.util.concurrent.TimeUnit;
  * xx.ch@outlook.com
  */
 public final class NetBird implements Call.Factory {
+    private final Scheduler scheduler;
+    private final Logger logger;
     private final List<Interceptor> headInterceptors;
     private final List<Interceptor> tailInterceptors;
     private final ExecutorService executor;
@@ -38,8 +43,8 @@ public final class NetBird implements Call.Factory {
     private final boolean enabledGzip;
 
     private NetBird(Builder builder) {
-        ScheduleCenter.scheduler = Builder.platform.scheduler();
-        LoggerUtils.logger = Builder.platform.logger();
+        this.scheduler = builder.scheduler;
+        this.logger = builder.logger;
         this.headInterceptors = Utils.immutableList(builder.headInterceptors);
         this.tailInterceptors = Utils.immutableList(builder.tailInterceptors);
         this.executor = builder.executor;
@@ -58,6 +63,8 @@ public final class NetBird implements Call.Factory {
         this.dispatcher.setMaxRunning(maxRunning);
         this.enabledExceptionLog = builder.enabledExceptionLog;
         this.enabledGzip = builder.enabledGzip;
+        ScheduleCenter.scheduler = this.scheduler;
+        LoggerUtils.logger = this.logger;
         LoggerUtils.setLevel(enabledExceptionLog ? Level.VERBOSE : Level.NOTHING);
     }
 
@@ -177,7 +184,8 @@ public final class NetBird implements Call.Factory {
     }
 
     public static final class Builder {
-        private static Platform platform;
+        private Scheduler scheduler;
+        private Logger logger;
         private List<Interceptor> headInterceptors;
         private List<Interceptor> tailInterceptors;
         private ExecutorService executor;
@@ -200,8 +208,9 @@ public final class NetBird implements Call.Factory {
          * @throws NullPointerException     如果 baseUrl 为 {@code null} 将抛出此异常
          * @throws IllegalArgumentException 如果 baseUrl 不是以 "http" 开始将抛出此异常
          */
-        public Builder(Platform platform, String baseUrl) {
-            Builder.platform = Utils.nonNull(platform, "platform == null");
+        public Builder(String baseUrl) {
+            this.scheduler = new AnyScheduler();
+            this.logger = new AnyLogger();
             this.baseUrl = Utils.checkedHttp(baseUrl);
             this.cacheSize = -1L;
             this.headInterceptors = new ArrayList<>(2);
@@ -212,6 +221,8 @@ public final class NetBird implements Call.Factory {
         }
 
         private Builder(NetBird netBird) {
+            this.scheduler = netBird.scheduler;
+            this.logger = netBird.logger;
             this.baseUrl = netBird.baseUrl;
             this.headInterceptors = new ArrayList<>(netBird.headInterceptors);
             this.tailInterceptors = new ArrayList<>(netBird.tailInterceptors);
@@ -228,6 +239,16 @@ public final class NetBird implements Call.Factory {
             this.connectTimeOut = netBird.connectTimeOut;
             this.enabledExceptionLog = netBird.enabledExceptionLog;
             this.enabledGzip = netBird.enabledGzip;
+        }
+
+        public Builder scheduler(Scheduler scheduler) {
+            this.scheduler = Utils.nonNull(scheduler, "scheduler == null");
+            return this;
+        }
+
+        public Builder logger(Logger logger) {
+            this.logger = Utils.nonNull(logger, "logger == null");
+            return this;
         }
 
         /**

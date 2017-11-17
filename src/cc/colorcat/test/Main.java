@@ -4,7 +4,6 @@ import cc.colorcat.netbird3.FileParser;
 import cc.colorcat.netbird3.LoadListener;
 import cc.colorcat.netbird3.MRequest;
 import cc.colorcat.netbird3.NetBird;
-import cc.colorcat.netbird3.platform.JavaPlatform;
 
 import java.io.File;
 
@@ -12,7 +11,7 @@ public class Main {
     private static final NetBird BIRD;
 
     static {
-        BIRD = new NetBird.Builder(new JavaPlatform(), "https://www.qq.com/")
+        BIRD = new NetBird.Builder("https://www.qq.com/")
                 .enableExceptionLog(true)
                 .readTimeOut(10000)
                 .connectTimeOut(10000)

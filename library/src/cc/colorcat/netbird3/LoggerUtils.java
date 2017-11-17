@@ -51,7 +51,7 @@ final class LoggerUtils {
     }
 
     private static void realLog(@Level int level, String tag, String msg) {
-        if (level >= LoggerUtils.level && logger != null) {
+        if (level >= LoggerUtils.level) {
             logger.log(level, tag, msg);
         }
     }
