@@ -1,8 +1,8 @@
 package cc.colorcat.netbird3;
 
 import cc.colorcat.netbird3.internal.Level;
-import cc.colorcat.netbird3.platform.AnyLogger;
-import cc.colorcat.netbird3.platform.AnyScheduler;
+import cc.colorcat.netbird3.platform.GenericLogger;
+import cc.colorcat.netbird3.platform.GenericScheduler;
 import cc.colorcat.netbird3.platform.Logger;
 import cc.colorcat.netbird3.platform.Scheduler;
 
@@ -209,8 +209,8 @@ public final class NetBird implements Call.Factory {
          * @throws IllegalArgumentException 如果 baseUrl 不是以 "http" 开始将抛出此异常
          */
         public Builder(String baseUrl) {
-            this.scheduler = new AnyScheduler();
-            this.logger = new AnyLogger();
+            this.scheduler = new GenericScheduler();
+            this.logger = new GenericLogger();
             this.baseUrl = Utils.checkedHttp(baseUrl);
             this.cacheSize = -1L;
             this.headInterceptors = new ArrayList<>(2);
@@ -241,11 +241,17 @@ public final class NetBird implements Call.Factory {
             this.enabledGzip = netBird.enabledGzip;
         }
 
+        /**
+         * @param scheduler 线程调度器，如 android 结果监听应在主线程，需手动配置。
+         */
         public Builder scheduler(Scheduler scheduler) {
             this.scheduler = Utils.nonNull(scheduler, "scheduler == null");
             return this;
         }
 
+        /**
+         * @param logger 自定义日志打印
+         */
         public Builder logger(Logger logger) {
             this.logger = Utils.nonNull(logger, "logger == null");
             return this;

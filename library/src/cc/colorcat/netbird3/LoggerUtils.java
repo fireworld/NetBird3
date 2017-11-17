@@ -41,13 +41,16 @@ final class LoggerUtils {
         }
     }
 
-    static void setLevel(@Level int level) {
-        LoggerUtils.level = level;
+    static void dd(String tag, String msg) {
+        logger.log(DEBUG, tag, msg);
     }
 
-    @Level
-    static int getLevel() {
-        return LoggerUtils.level;
+    static void ii(String tag, String msg) {
+        logger.log(INFO, tag, msg);
+    }
+
+    static void setLevel(@Level int level) {
+        LoggerUtils.level = level;
     }
 
     private static void realLog(@Level int level, String tag, String msg) {

@@ -10,12 +10,12 @@ import java.io.IOException;
  * xx.ch@outlook.com
  */
 public final class FileParser implements Parser<File> {
-    private File file;
+    private File savePath;
 
     /**
      * Constructs a new {@link FileParser} using the specified path.
      *
-     * @param savePath the path to be used for save the file.
+     * @param savePath the path to be used for save the savePath.
      * @throws NullPointerException if {@code savePath} is {@code null}.
      */
     public static FileParser create(String savePath) {
@@ -23,28 +23,28 @@ public final class FileParser implements Parser<File> {
         return create(file);
     }
 
-    public static FileParser create(File file) {
-        if (file == null) {
-            throw new NullPointerException("file == null");
+    public static FileParser create(File savePath) {
+        if (savePath == null) {
+            throw new NullPointerException("savePath == null");
         }
-        File parent = file.getParentFile();
+        File parent = savePath.getParentFile();
         if (parent.exists() || parent.mkdirs()) {
-            return new FileParser(file);
+            return new FileParser(savePath);
         }
         throw new RuntimeException("Can't create directory, " + parent.getAbsolutePath());
     }
 
-    private FileParser(File file) {
-        this.file = file;
+    private FileParser(File savePath) {
+        this.savePath = savePath;
     }
 
     @Override
     public NetworkData<? extends File> parse(Response data) throws IOException {
         FileOutputStream fos = null;
         try {
-            fos = new FileOutputStream(file);
+            fos = new FileOutputStream(savePath);
             Utils.justDump(data.body().stream(), fos);
-            return NetworkData.newSuccess(file);
+            return NetworkData.newSuccess(savePath);
         } finally {
             Utils.close(fos);
         }
