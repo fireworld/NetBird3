@@ -46,7 +46,7 @@ public final class HttpConnection implements Connection {
         Method method = request.method();
         conn.setRequestMethod(method.name());
         conn.setDoOutput(method.needBody());
-        conn.setUseCaches(cacheEnabled);
+        conn.setUseCaches(netBird.cacheSize() > 0);
         if (conn instanceof HttpsURLConnection) {
             HttpsURLConnection connection = (HttpsURLConnection) conn;
             SSLSocketFactory factory = netBird.sslSocketFactory();
