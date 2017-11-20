@@ -24,7 +24,7 @@ final class Utils {
                 return value;
             }
         } catch (Exception e) {
-            LoggerUtils.e(e);
+            LogUtils.e(e);
         }
         return encode(value);
     }
@@ -123,7 +123,7 @@ final class Utils {
             try {
                 cs.close();
             } catch (IOException e) {
-                LoggerUtils.e(e);
+                LogUtils.e(e);
             }
         }
     }

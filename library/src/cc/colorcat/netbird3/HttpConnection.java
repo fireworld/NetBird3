@@ -143,7 +143,7 @@ public final class HttpConnection implements Connection {
 //                    cacheEnabled = (cache != null);
 //                } catch (Exception e) {
 //                    cacheEnabled = false;
-//                    LoggerUtils.e(e);
+//                    LogUtils.e(e);
 //                }
 //            }
 //        } else if (cacheEnabled) {
@@ -154,7 +154,7 @@ public final class HttpConnection implements Connection {
 //                    cache.close();
 //                }
 //            } catch (Exception e) {
-//                LoggerUtils.e(e);
+//                LogUtils.e(e);
 //            }
 //        }
     }

@@ -8,7 +8,7 @@ import static cc.colorcat.netbird3.internal.Level.*;
  * Created by cxx on 17-2-22.
  * xx.ch@outlook.com
  */
-final class LoggerUtils {
+final class LogUtils {
     @Level
     private static int level = VERBOSE;
 
@@ -47,16 +47,16 @@ final class LoggerUtils {
     }
 
     static void setLevel(@Level int level) {
-        LoggerUtils.level = level;
+        LogUtils.level = level;
     }
 
     private static void realLog(@Level int level, String tag, String msg) {
-        if (level >= LoggerUtils.level) {
+        if (level >= LogUtils.level) {
             Platform.get().log(level, tag, msg);
         }
     }
 
-    private LoggerUtils() {
+    private LogUtils() {
         throw new AssertionError("no instance.");
     }
 }

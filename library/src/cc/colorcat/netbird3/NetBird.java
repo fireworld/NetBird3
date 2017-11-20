@@ -58,7 +58,7 @@ public final class NetBird implements Call.Factory {
         this.enabledExceptionLog = builder.enabledExceptionLog;
         this.enabledGzip = builder.enabledGzip;
         Platform.platform = this.platform;
-        LoggerUtils.setLevel(enabledExceptionLog ? Level.VERBOSE : Level.NOTHING);
+        LogUtils.setLevel(enabledExceptionLog ? Level.VERBOSE : Level.NOTHING);
     }
 
     /**
