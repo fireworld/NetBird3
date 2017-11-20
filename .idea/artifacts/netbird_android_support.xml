@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="netbird-android-support">
+    <output-path>$PROJECT_DIR$/out/artifacts/netbird_android_support</output-path>
+    <root id="archive" name="netbird-android-support.jar">
+      <element id="module-output" name="netbird-android-support" />
+    </root>
+  </artifact>
+</component>
