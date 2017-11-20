@@ -6,13 +6,13 @@ import cc.colorcat.netbird3.platform.Scheduler;
 import java.util.logging.Logger;
 
 /**
- * Created by cxx on ${DATA}.
+ * Created by cxx on 17-11-19.
  * xx.ch@outlook.com
  */
 public abstract class Platform {
     static Platform platform;
 
-    public static Platform findPlatForm() {
+    public static Platform get() {
         if (platform == null) {
             synchronized (Platform.class) {
                 if (platform == null) {
@@ -23,13 +23,22 @@ public abstract class Platform {
         return platform;
     }
 
+    static Platform findPlatform() {
+        try {
+            Class<?> c = Class.forName("cc.colorcat.netbird3.android.AndroidPlatform");
+            return (Platform) c.newInstance();
+        } catch (Exception ignore) {
+            return new GenericPlatform();
+        }
+    }
+
     public abstract Scheduler scheduler();
 
     public abstract void log(@Level int level, String tag, String msg);
 
 
     private static class GenericPlatform extends Platform {
-        private static final Logger LOGGER = Logger.getLogger(NetBird.class.getSimpleName());
+        private final Logger LOGGER = Logger.getLogger(NetBird.class.getSimpleName());
 
         @Override
         public Scheduler scheduler() {
@@ -47,7 +56,7 @@ public abstract class Platform {
         }
 
         @Override
-        public void log(int level, String tag, String msg) {
+        public void log(@Level int level, String tag, String msg) {
             String log = tag + " --> " + msg;
             switch (level) {
                 case Level.VERBOSE:

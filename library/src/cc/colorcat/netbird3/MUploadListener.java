@@ -21,6 +21,6 @@ final class MUploadListener implements UploadListener {
 
     @Override
     public void onChanged(long written, long total, int percent) {
-        ScheduleCenter.postProgressOnTargetThread(listener, written, total, percent);
+        ScheduleUtils.postProgressOnTargetThread(listener, written, total, percent);
     }
 }

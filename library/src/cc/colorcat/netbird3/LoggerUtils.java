@@ -1,7 +1,6 @@
 package cc.colorcat.netbird3;
 
 import cc.colorcat.netbird3.internal.Level;
-import cc.colorcat.netbird3.platform.Logger;
 
 import static cc.colorcat.netbird3.internal.Level.*;
 
@@ -10,8 +9,6 @@ import static cc.colorcat.netbird3.internal.Level.*;
  * xx.ch@outlook.com
  */
 final class LoggerUtils {
-    static Logger logger;
-
     @Level
     private static int level = VERBOSE;
 
@@ -42,11 +39,11 @@ final class LoggerUtils {
     }
 
     static void dd(String tag, String msg) {
-        logger.log(DEBUG, tag, msg);
+        Platform.get().log(DEBUG, tag, msg);
     }
 
     static void ii(String tag, String msg) {
-        logger.log(INFO, tag, msg);
+        Platform.get().log(INFO, tag, msg);
     }
 
     static void setLevel(@Level int level) {
@@ -55,7 +52,7 @@ final class LoggerUtils {
 
     private static void realLog(@Level int level, String tag, String msg) {
         if (level >= LoggerUtils.level) {
-            logger.log(level, tag, msg);
+            Platform.get().log(level, tag, msg);
         }
     }
 

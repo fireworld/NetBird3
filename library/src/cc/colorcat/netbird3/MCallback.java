@@ -18,7 +18,7 @@ final class MCallback<T> implements Callback {
 
     @Override
     public void onStart() {
-        ScheduleCenter.callStartOnTargetThread(listener);
+        ScheduleUtils.callStartOnTargetThread(listener);
     }
 
     @Override
@@ -40,6 +40,6 @@ final class MCallback<T> implements Callback {
 
     @Override
     public void onFinish() {
-        ScheduleCenter.deliverDataOnTargetThread(listener, data);
+        ScheduleUtils.deliverDataOnTargetThread(listener, data);
     }
 }

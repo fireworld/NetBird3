@@ -1,10 +1,6 @@
 package cc.colorcat.netbird3;
 
 import cc.colorcat.netbird3.internal.Level;
-import cc.colorcat.netbird3.platform.GenericLogger;
-import cc.colorcat.netbird3.platform.GenericScheduler;
-import cc.colorcat.netbird3.platform.Logger;
-import cc.colorcat.netbird3.platform.Scheduler;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLSocketFactory;
@@ -23,8 +19,7 @@ import java.util.concurrent.TimeUnit;
  * xx.ch@outlook.com
  */
 public final class NetBird implements Call.Factory {
-    private final Scheduler scheduler;
-    private final Logger logger;
+    private final Platform platform;
     private final List<Interceptor> headInterceptors;
     private final List<Interceptor> tailInterceptors;
     private final ExecutorService executor;
@@ -43,8 +38,7 @@ public final class NetBird implements Call.Factory {
     private final boolean enabledGzip;
 
     private NetBird(Builder builder) {
-        this.scheduler = builder.scheduler;
-        this.logger = builder.logger;
+        this.platform = builder.platform;
         this.headInterceptors = Utils.immutableList(builder.headInterceptors);
         this.tailInterceptors = Utils.immutableList(builder.tailInterceptors);
         this.executor = builder.executor;
@@ -63,8 +57,7 @@ public final class NetBird implements Call.Factory {
         this.dispatcher.setMaxRunning(maxRunning);
         this.enabledExceptionLog = builder.enabledExceptionLog;
         this.enabledGzip = builder.enabledGzip;
-        ScheduleCenter.scheduler = this.scheduler;
-        LoggerUtils.logger = this.logger;
+        Platform.platform = this.platform;
         LoggerUtils.setLevel(enabledExceptionLog ? Level.VERBOSE : Level.NOTHING);
     }
 
@@ -184,8 +177,7 @@ public final class NetBird implements Call.Factory {
     }
 
     public static final class Builder {
-        private Scheduler scheduler;
-        private Logger logger;
+        private Platform platform;
         private List<Interceptor> headInterceptors;
         private List<Interceptor> tailInterceptors;
         private ExecutorService executor;
@@ -209,8 +201,7 @@ public final class NetBird implements Call.Factory {
          * @throws IllegalArgumentException 如果 baseUrl 不是以 "http" 开始将抛出此异常
          */
         public Builder(String baseUrl) {
-            this.scheduler = new GenericScheduler();
-            this.logger = new GenericLogger();
+            this.platform = Platform.findPlatform();
             this.baseUrl = Utils.checkedHttp(baseUrl);
             this.cacheSize = -1L;
             this.headInterceptors = new ArrayList<>(2);
@@ -221,8 +212,7 @@ public final class NetBird implements Call.Factory {
         }
 
         private Builder(NetBird netBird) {
-            this.scheduler = netBird.scheduler;
-            this.logger = netBird.logger;
+            this.platform = netBird.platform;
             this.baseUrl = netBird.baseUrl;
             this.headInterceptors = new ArrayList<>(netBird.headInterceptors);
             this.tailInterceptors = new ArrayList<>(netBird.tailInterceptors);
@@ -241,19 +231,8 @@ public final class NetBird implements Call.Factory {
             this.enabledGzip = netBird.enabledGzip;
         }
 
-        /**
-         * @param scheduler 线程调度器，如 android 结果监听应在主线程，需手动配置。
-         */
-        public Builder scheduler(Scheduler scheduler) {
-            this.scheduler = Utils.nonNull(scheduler, "scheduler == null");
-            return this;
-        }
-
-        /**
-         * @param logger 自定义日志打印
-         */
-        public Builder logger(Logger logger) {
-            this.logger = Utils.nonNull(logger, "logger == null");
+        public Builder platform(Platform platform) {
+            this.platform = Utils.nonNull(platform, "platform == null");
             return this;
         }
 

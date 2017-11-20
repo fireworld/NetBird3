@@ -21,6 +21,6 @@ final class MLoadListener implements LoadListener {
 
     @Override
     public void onChanged(long read, long total, int percent) {
-        ScheduleCenter.postProgressOnTargetThread(listener, read, total, percent);
+        ScheduleUtils.postProgressOnTargetThread(listener, read, total, percent);
     }
 }

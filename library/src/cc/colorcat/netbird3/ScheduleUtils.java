@@ -1,20 +1,17 @@
 package cc.colorcat.netbird3;
 
-import cc.colorcat.netbird3.platform.Scheduler;
-
 /**
  * Created by cxx on 17-3-5.
  * xx.ch@outlook.com
  */
-final class ScheduleCenter {
-    static Scheduler scheduler;
+final class ScheduleUtils {
 
     static void callStartOnTargetThread(final MRequest.Listener<?> listener) {
         if (listener != null) {
-            if (scheduler.isTargetThread()) {
+            if (isTargetThread()) {
                 listener.onStart();
             } else {
-                scheduler.onTargetThread(new Runnable() {
+                onTargetThread(new Runnable() {
                     @Override
                     public void run() {
                         listener.onStart();
@@ -26,10 +23,10 @@ final class ScheduleCenter {
 
     static <T> void deliverDataOnTargetThread(final MRequest.Listener<? super T> listener, final NetworkData<? extends T> data) {
         if (listener != null) {
-            if (scheduler.isTargetThread()) {
+            if (isTargetThread()) {
                 deliverData(listener, data);
             } else {
-                scheduler.onTargetThread(new Runnable() {
+                onTargetThread(new Runnable() {
                     @Override
                     public void run() {
                         deliverData(listener, data);
@@ -49,10 +46,10 @@ final class ScheduleCenter {
     }
 
     static void postProgressOnTargetThread(final ProgressListener listener, final long finished, final long total, final int percent) {
-        if (scheduler.isTargetThread()) {
+        if (isTargetThread()) {
             listener.onChanged(finished, total, percent);
         } else {
-            scheduler.onTargetThread(new Runnable() {
+            onTargetThread(new Runnable() {
                 @Override
                 public void run() {
                     listener.onChanged(finished, total, percent);
@@ -61,7 +58,15 @@ final class ScheduleCenter {
         }
     }
 
-    private ScheduleCenter() {
+    private static boolean isTargetThread() {
+        return Platform.get().scheduler().isTargetThread();
+    }
+
+    private static void onTargetThread(Runnable runnable) {
+        Platform.get().scheduler().onTargetThread(runnable);
+    }
+
+    private ScheduleUtils() {
         throw new AssertionError("no instance");
     }
 }
