@@ -3,6 +3,7 @@ package cc.colorcat.netbird3;
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLSocketFactory;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -16,7 +17,8 @@ import java.util.Map;
  * Created by cxx on 17-2-22.
  * xx.ch@outlook.com
  */
-public final class HttpConnection implements Connection {
+public class HttpConnection implements Connection {
+    protected boolean cacheEnabled = false;
     private HttpURLConnection conn;
     private InputStream is;
     private LoadListener listener;
@@ -25,9 +27,14 @@ public final class HttpConnection implements Connection {
 
     }
 
+    private HttpConnection(boolean cacheEnabled) {
+        this.cacheEnabled = cacheEnabled;
+    }
+
     @Override
     public void connect(NetBird netBird, Request request) throws IOException {
         listener = request.loadListener();
+        enableCache(netBird.cachePath(), netBird.cacheSize());
         URL url = new URL(request.url());
         Proxy proxy = netBird.proxy();
         conn = (HttpURLConnection) (proxy == null ? url.openConnection() : url.openConnection(proxy));
@@ -37,7 +44,7 @@ public final class HttpConnection implements Connection {
         Method method = request.method();
         conn.setRequestMethod(method.name());
         conn.setDoOutput(method.needBody());
-        conn.setUseCaches(netBird.cacheSize() > 0 && netBird.cachePath() != null);
+        conn.setUseCaches(cacheEnabled);
         if (conn instanceof HttpsURLConnection) {
             HttpsURLConnection connection = (HttpsURLConnection) conn;
             SSLSocketFactory factory = netBird.sslSocketFactory();
@@ -102,7 +109,7 @@ public final class HttpConnection implements Connection {
     @SuppressWarnings("CloneDoesntCallSuperClone")
     @Override
     public Connection clone() {
-        return new HttpConnection();
+        return new HttpConnection(cacheEnabled);
     }
 
     @Override
@@ -118,5 +125,9 @@ public final class HttpConnection implements Connection {
         if (conn != null) {
             conn.disconnect();
         }
+    }
+
+    protected void enableCache(File path, long cacheSize) {
+        cacheEnabled = (path != null && cacheSize > 0);
     }
 }
