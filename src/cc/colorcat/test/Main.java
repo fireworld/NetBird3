@@ -20,7 +20,7 @@ public class Main {
 
     public static void main(String[] args) {
         String url = "https://dldir1.qq.com/invc/tt/QQBrowser_Setup_9.6.12501.400.exe";
-        File file = new File("/home/cxx/qq.exe");
+        File file = new File("/Users/cxx/Downloads/qq.exe");
         MRequest<File> request = new MRequest.Builder<>(FileParser.create(file))
                 .url(url)
                 .loadListener(new LoadListener() {
