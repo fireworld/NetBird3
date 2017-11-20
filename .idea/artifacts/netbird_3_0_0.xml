@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="netbird-3.0.0">
+    <output-path>$PROJECT_DIR$/out/artifacts/netbird_3_0_0</output-path>
+    <root id="archive" name="netbird-3.0.0.jar">
+      <element id="module-output" name="library" />
+    </root>
+  </artifact>
+</component>
