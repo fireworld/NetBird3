@@ -10,7 +10,7 @@ import java.util.logging.Logger;
  * Created by cxx on 17-11-20.
  * xx.ch@outlook.com
  */
-public class GenericPlatform extends Platform {
+public final class GenericPlatform extends Platform {
     private final Logger LOGGER = Logger.getLogger(NetBird.class.getSimpleName());
 
     @Override

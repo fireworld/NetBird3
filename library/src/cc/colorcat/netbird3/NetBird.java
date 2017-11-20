@@ -86,7 +86,7 @@ public final class NetBird implements Call.Factory {
     }
 
     public Connection connection() {
-        return connection;
+        return connection.clone();
     }
 
     public Proxy proxy() {

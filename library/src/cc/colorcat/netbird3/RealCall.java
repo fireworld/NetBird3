@@ -19,7 +19,7 @@ final class RealCall implements Call {
     RealCall(NetBird netBird, Request originalRequest) {
         this.netBird = netBird;
         this.request = originalRequest;
-        this.connection = netBird.connection().clone();
+        this.connection = netBird.connection();
         this.executed = new AtomicBoolean(false);
         this.canceled = new AtomicBoolean(false);
     }
