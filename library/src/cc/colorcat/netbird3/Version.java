@@ -6,7 +6,7 @@ package cc.colorcat.netbird3;
  */
 final class Version {
     static String userAgent() {
-        return "NetBird3/1.0";
+        return "NetBird/3.0.0";
     }
 
     private Version() {
