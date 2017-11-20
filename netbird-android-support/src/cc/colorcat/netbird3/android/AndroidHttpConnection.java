@@ -21,7 +21,7 @@ public final class AndroidHttpConnection implements Connection {
     private HttpURLConnection conn;
     private InputStream is;
     private LoadListener listener;
-    private boolean cacheEnabled;
+    private boolean cacheEnabled = false;
 
     public AndroidHttpConnection() {
 
