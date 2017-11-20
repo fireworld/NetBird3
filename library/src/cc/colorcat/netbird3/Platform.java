@@ -10,13 +10,13 @@ import java.util.logging.Logger;
  * xx.ch@outlook.com
  */
 public abstract class Platform {
-    static Platform platform;
+    static volatile Platform platform;
 
     public static Platform get() {
         if (platform == null) {
             synchronized (Platform.class) {
                 if (platform == null) {
-                    platform = new GenericPlatform();
+                    platform = findPlatform();
                 }
             }
         }
