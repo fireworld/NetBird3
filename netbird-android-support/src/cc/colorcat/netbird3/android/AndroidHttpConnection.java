@@ -1,11 +1,12 @@
-package cc.colorcat.netbird3;
+package cc.colorcat.netbird3.android;
+
+import android.net.http.HttpResponseCache;
+import cc.colorcat.netbird3.*;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLSocketFactory;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.Proxy;
 import java.net.URL;
@@ -13,21 +14,27 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by cxx on 17-2-22.
+ * Created by cxx on 2017/11/20.
  * xx.ch@outlook.com
  */
-public final class HttpConnection implements Connection {
+public final class AndroidHttpConnection implements Connection {
     private HttpURLConnection conn;
     private InputStream is;
     private LoadListener listener;
+    private boolean cacheEnabled;
 
-    public HttpConnection() {
+    public AndroidHttpConnection() {
 
+    }
+
+    private AndroidHttpConnection(boolean cacheEnabled) {
+        this.cacheEnabled = cacheEnabled;
     }
 
     @Override
     public void connect(NetBird netBird, Request request) throws IOException {
         listener = request.loadListener();
+        enableCache(netBird.cachePath(), netBird.cacheSize());
         URL url = new URL(request.url());
         Proxy proxy = netBird.proxy();
         conn = (HttpURLConnection) (proxy == null ? url.openConnection() : url.openConnection(proxy));
@@ -37,7 +44,7 @@ public final class HttpConnection implements Connection {
         Method method = request.method();
         conn.setRequestMethod(method.name());
         conn.setDoOutput(method.needBody());
-        conn.setUseCaches(netBird.cacheSize() > 0 && netBird.cachePath() != null);
+        conn.setUseCaches(cacheEnabled);
         if (conn instanceof HttpsURLConnection) {
             HttpsURLConnection connection = (HttpsURLConnection) conn;
             SSLSocketFactory factory = netBird.sslSocketFactory();
@@ -70,7 +77,7 @@ public final class HttpConnection implements Connection {
                 body.writeTo(os);
                 os.flush();
             } finally {
-                Utils.close(os);
+                close(os);
             }
         }
     }
@@ -102,21 +109,59 @@ public final class HttpConnection implements Connection {
     @SuppressWarnings("CloneDoesntCallSuperClone")
     @Override
     public Connection clone() {
-        return new HttpConnection();
-    }
-
-    @Override
-    public void close() throws IOException {
-        Utils.close(is);
-        if (conn != null) {
-            conn.disconnect();
-        }
+        return new AndroidHttpConnection(cacheEnabled);
     }
 
     @Override
     public void cancel() {
         if (conn != null) {
             conn.disconnect();
+        }
+    }
+
+    @Override
+    public void close() throws IOException {
+        close(is);
+        if (conn != null) {
+            conn.disconnect();
+        }
+    }
+
+    private void enableCache(File path, long cacheSize) {
+        if (cacheSize > 0 && path != null) {
+            if (!cacheEnabled) {
+                try {
+                    HttpResponseCache cache = HttpResponseCache.getInstalled();
+                    if (cache == null) {
+                        File cachePath = new File(path, "NetBird");
+                        if (cachePath.exists() || cachePath.mkdirs()) {
+                            cache = HttpResponseCache.install(cachePath, cacheSize);
+                        }
+                    }
+                    cacheEnabled = (cache != null);
+                } catch (Exception ignore) {
+                    cacheEnabled = false;
+                }
+            }
+        } else if (cacheEnabled) {
+            cacheEnabled = false;
+            try {
+                HttpResponseCache cache = HttpResponseCache.getInstalled();
+                if (cache != null) {
+                    cache.close();
+                }
+            } catch (Exception ignore) {
+            }
+        }
+    }
+
+    private static void close(Closeable closeable) {
+        if (closeable != null) {
+            try {
+                closeable.close();
+            } catch (IOException ignore) {
+
+            }
         }
     }
 }

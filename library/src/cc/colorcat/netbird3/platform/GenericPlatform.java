@@ -1,5 +1,7 @@
 package cc.colorcat.netbird3.platform;
 
+import cc.colorcat.netbird3.Connection;
+import cc.colorcat.netbird3.HttpConnection;
 import cc.colorcat.netbird3.NetBird;
 import cc.colorcat.netbird3.Platform;
 import cc.colorcat.netbird3.internal.Level;
@@ -12,6 +14,11 @@ import java.util.logging.Logger;
  */
 public final class GenericPlatform extends Platform {
     private final Logger LOGGER = Logger.getLogger(NetBird.class.getSimpleName());
+
+    @Override
+    public Connection connection() {
+        return new HttpConnection();
+    }
 
     @Override
     public Scheduler scheduler() {

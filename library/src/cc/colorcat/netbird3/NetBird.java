@@ -367,7 +367,7 @@ public final class NetBird implements Call.Factory {
 
         public NetBird build() {
             if (executor == null) executor = defaultService(maxRunning);
-            if (connection == null) connection = new HttpConnection();
+            if (connection == null) connection = platform.connection();
             return new NetBird(this);
         }
 

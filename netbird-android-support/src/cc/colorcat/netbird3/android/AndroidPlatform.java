@@ -3,6 +3,7 @@ package cc.colorcat.netbird3.android;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import cc.colorcat.netbird3.Connection;
 import cc.colorcat.netbird3.Platform;
 import cc.colorcat.netbird3.internal.Level;
 import cc.colorcat.netbird3.platform.Scheduler;
@@ -14,6 +15,11 @@ import cc.colorcat.netbird3.platform.Scheduler;
  */
 public class AndroidPlatform extends Platform {
     private static final Handler HANDLER = new Handler(Looper.getMainLooper());
+
+    @Override
+    public Connection connection() {
+        return new AndroidHttpConnection();
+    }
 
     @Override
     public Scheduler scheduler() {

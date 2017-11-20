@@ -31,6 +31,8 @@ public abstract class Platform {
         }
     }
 
+    public abstract Connection connection();
+
     public abstract Scheduler scheduler();
 
     public abstract void log(@Level int level, String tag, String msg);
