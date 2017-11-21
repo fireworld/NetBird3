@@ -2,6 +2,7 @@ package cc.colorcat.netbird3.logging;
 
 import cc.colorcat.netbird3.*;
 import cc.colorcat.netbird3.internal.Level;
+import cc.colorcat.netbird3.platform.Logger;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -17,13 +18,15 @@ public class LoggingTailInterceptor implements Interceptor {
     private static final String HALF_LINE = buildLine(38, '-');
 
     private final Charset defaultCharset;
-    private final LoggingFilter filter;
+    private final Logger logger;
+    private final Filter filter;
 
-    public LoggingTailInterceptor(LoggingFilter filter) {
-        this(filter, Charset.forName("UTF-8"));
+    public LoggingTailInterceptor(Logger logger, Filter filter) {
+        this(logger, filter, Charset.forName("UTF-8"));
     }
 
-    public LoggingTailInterceptor(LoggingFilter filter, Charset defaultCharset) {
+    public LoggingTailInterceptor(Logger logger, Filter filter, Charset defaultCharset) {
+        this.logger = logger;
         this.filter = filter;
         this.defaultCharset = defaultCharset;
     }
@@ -77,21 +80,21 @@ public class LoggingTailInterceptor implements Interceptor {
         return response;
     }
 
-    private static void logPairs(@Level int level, String type, List<String> names, List<String> values) {
+    private void logPairs(@Level int level, String type, List<String> names, List<String> values) {
         for (int i = 0, size = names.size(); i < size; i++) {
             String msg = type + " --> " + names.get(i) + " = " + values.get(i);
             log(level, msg);
         }
     }
 
-    private static void logFiles(@Level int level, List<FileBody> bodies) {
+    private void logFiles(@Level int level, List<FileBody> bodies) {
         for (int i = 0, size = bodies.size(); i < size; i++) {
             log(level, "request file --> " + bodies.get(i).toString());
         }
     }
 
-    private static void log(@Level int level, String msg) {
-        LogUtils.ll(level, TAG, msg);
+    private void log(@Level int level, String msg) {
+        logger.log(level, TAG, msg);
     }
 
     private static String buildLine(int n, char c) {

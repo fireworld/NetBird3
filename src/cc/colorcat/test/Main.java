@@ -1,8 +1,9 @@
 package cc.colorcat.test;
 
 import cc.colorcat.netbird3.*;
-import cc.colorcat.netbird3.logging.LoggingFilter;
+import cc.colorcat.netbird3.logging.Filter;
 import cc.colorcat.netbird3.logging.LoggingTailInterceptor;
+import cc.colorcat.netbird3.platform.GenericLogger;
 
 import java.io.File;
 
@@ -10,7 +11,7 @@ public class Main {
     private static final NetBird BIRD;
 
     static {
-        LoggingFilter filter = new LoggingFilter() {
+        Filter filter = new Filter() {
             @Override
             public boolean filter(String contentType) {
                 String s = contentType.toLowerCase();
@@ -19,7 +20,7 @@ public class Main {
         };
         BIRD = new NetBird.Builder("https://www.qq.com/")
                 .enableExceptionLog(true)
-                .addTailInterceptor(new LoggingTailInterceptor(filter))
+                .addTailInterceptor(new LoggingTailInterceptor(new GenericLogger(), filter))
                 .readTimeOut(10000)
                 .connectTimeOut(10000)
                 .build();

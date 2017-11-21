@@ -8,7 +8,7 @@ import static cc.colorcat.netbird3.internal.Level.*;
  * Created by cxx on 17-2-22.
  * xx.ch@outlook.com
  */
-public final class LogUtils {
+final class LogUtils {
     @Level
     private static int level = VERBOSE;
 
@@ -46,10 +46,6 @@ public final class LogUtils {
         realLog(INFO, tag, msg);
     }
 
-    public static void ll(@Level int level, String tag, String msg) {
-        realLog(level, tag, msg);
-    }
-
     static void setLevel(@Level int level) {
         LogUtils.level = level;
     }
@@ -61,7 +57,7 @@ public final class LogUtils {
     }
 
     private static void realLog(@Level int level, String tag, String msg) {
-        Platform.get().log(level, tag, msg);
+        Platform.get().logger().log(level, tag, msg);
     }
 
     private LogUtils() {
