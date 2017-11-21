@@ -6,14 +6,33 @@ import cc.colorcat.netbird3.NetBird;
 import cc.colorcat.netbird3.Platform;
 import cc.colorcat.netbird3.internal.Level;
 
-import java.util.logging.Logger;
+import java.util.logging.*;
 
 /**
  * Created by cxx on 17-11-20.
  * xx.ch@outlook.com
  */
 public final class GenericPlatform extends Platform {
-    private final Logger LOGGER = Logger.getLogger(NetBird.class.getSimpleName());
+    private final Logger LOGGER;
+
+    {
+        LOGGER = Logger.getLogger(NetBird.class.getSimpleName());
+        java.util.logging.Level level = java.util.logging.Level.ALL;
+        Formatter formatter = new Formatter() {
+            @Override
+            public synchronized String format(LogRecord record) {
+                return record.getMessage() + "\n";
+            }
+        };
+        for (Handler handler : LOGGER.getParent().getHandlers()) {
+            handler.setLevel(java.util.logging.Level.OFF);
+        }
+        ConsoleHandler handler = new ConsoleHandler();
+        handler.setFormatter(formatter);
+        handler.setLevel(level);
+        LOGGER.addHandler(handler);
+        LOGGER.setLevel(level);
+    }
 
     @Override
     public Connection connection() {

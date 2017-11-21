@@ -11,7 +11,7 @@ import cc.colorcat.netbird3.platform.Scheduler;
 public abstract class Platform {
     static volatile Platform platform;
 
-    public static Platform get() {
+    static Platform get() {
         if (platform == null) {
             synchronized (Platform.class) {
                 if (platform == null) {

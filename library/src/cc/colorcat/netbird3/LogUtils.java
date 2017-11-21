@@ -8,28 +8,28 @@ import static cc.colorcat.netbird3.internal.Level.*;
  * Created by cxx on 17-2-22.
  * xx.ch@outlook.com
  */
-final class LogUtils {
+public final class LogUtils {
     @Level
     private static int level = VERBOSE;
 
     static void v(String tag, String msg) {
-        realLog(VERBOSE, tag, msg);
+        logWithLevel(VERBOSE, tag, msg);
     }
 
     static void d(String tag, String msg) {
-        realLog(DEBUG, tag, msg);
+        logWithLevel(DEBUG, tag, msg);
     }
 
     static void i(String tag, String msg) {
-        realLog(INFO, tag, msg);
+        logWithLevel(INFO, tag, msg);
     }
 
     static void w(String tag, String msg) {
-        realLog(WARN, tag, msg);
+        logWithLevel(WARN, tag, msg);
     }
 
     static void e(String tag, String msg) {
-        realLog(ERROR, tag, msg);
+        logWithLevel(ERROR, tag, msg);
     }
 
     static void e(Throwable e) {
@@ -39,21 +39,29 @@ final class LogUtils {
     }
 
     static void dd(String tag, String msg) {
-        Platform.get().log(DEBUG, tag, msg);
+        realLog(DEBUG, tag, msg);
     }
 
     static void ii(String tag, String msg) {
-        Platform.get().log(INFO, tag, msg);
+        realLog(INFO, tag, msg);
+    }
+
+    public static void ll(@Level int level, String tag, String msg) {
+        realLog(level, tag, msg);
     }
 
     static void setLevel(@Level int level) {
         LogUtils.level = level;
     }
 
-    private static void realLog(@Level int level, String tag, String msg) {
+    private static void logWithLevel(@Level int level, String tag, String msg) {
         if (level >= LogUtils.level) {
-            Platform.get().log(level, tag, msg);
+            realLog(level, tag, msg);
         }
+    }
+
+    private static void realLog(@Level int level, String tag, String msg) {
+        Platform.get().log(level, tag, msg);
     }
 
     private LogUtils() {
