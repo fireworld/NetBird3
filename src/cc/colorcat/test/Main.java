@@ -9,8 +9,10 @@ import java.io.File;
 
 public class Main {
     private static final NetBird BIRD;
+    private static final File HOME;
 
     static {
+        HOME = new File(System.getProperty("user.home"));
         Filter filter = new Filter() {
             @Override
             public boolean filter(String contentType) {
@@ -27,6 +29,7 @@ public class Main {
     }
 
     public static void main(String[] args) {
+//        testDownload();
         testText();
     }
 
@@ -51,7 +54,7 @@ public class Main {
 
     private static void testDownload() {
         String url = "https://dldir1.qq.com/invc/tt/QQBrowser_Setup_9.6.12501.400.exe";
-        File file = new File("/Users/cxx/Downloads/qq.exe");
+        File file = new File(HOME, "/Downloads/qq.exe");
         MRequest<File> request = new MRequest.Builder<>(FileParser.create(file))
                 .url(url)
                 .loadListener(new LoadListener() {
