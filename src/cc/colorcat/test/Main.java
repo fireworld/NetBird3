@@ -5,7 +5,6 @@ import cc.colorcat.netbird3.logging.LoggingFilter;
 import cc.colorcat.netbird3.logging.LoggingTailInterceptor;
 
 import java.io.File;
-import java.nio.charset.Charset;
 
 public class Main {
     private static final NetBird BIRD;
@@ -20,35 +19,29 @@ public class Main {
         };
         BIRD = new NetBird.Builder("https://www.qq.com/")
                 .enableExceptionLog(true)
-                .addTailInterceptor(new LoggingTailInterceptor(filter, Charset.forName("GBK")))
+                .addTailInterceptor(new LoggingTailInterceptor(filter))
                 .readTimeOut(10000)
                 .connectTimeOut(10000)
                 .build();
     }
 
     public static void main(String[] args) {
-        String url = "http://www.pconline.com.cn/";
-        MRequest<String> request = new MRequest.Builder<>(StringParser.create("GBK"))
+        testText();
+    }
+
+    private static void testText() {
+        String url = "http://sports.sina.com.cn/g/pl/table.html";
+        MRequest<String> request = new MRequest.Builder<>(StringParser.getUtf8())
                 .url(url)
-                .listener(new MRequest.Listener<String>() {
-                    @Override
-                    public void onStart() {
-
-                    }
-
+                .listener(new MRequest.SimpleListener<String>() {
                     @Override
                     public void onSuccess(String result) {
-                        System.out.println("onSuccess, result = " + result);
+//                        System.out.println("onSuccess, result = " + result);
                     }
 
                     @Override
                     public void onFailure(int code, String msg) {
                         System.out.println("onFailure, code = " + code + ", msg = " + msg);
-                    }
-
-                    @Override
-                    public void onFinish() {
-
                     }
                 })
                 .build();
