@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="netbird-logging-support">
+    <output-path>$PROJECT_DIR$/out/artifacts/netbird_logging_support</output-path>
+    <root id="archive" name="netbird-logging-support.jar">
+      <element id="module-output" name="netbird-logging-support" />
+    </root>
+  </artifact>
+</component>

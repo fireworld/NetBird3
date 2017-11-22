@@ -11,7 +11,7 @@ import cc.colorcat.netbird3.platform.Logger;
 public class AndroidLogger implements Logger {
 
     @Override
-    public void log(int level, String tag, String msg) {
+    public void log(@Level int level, String tag, String msg) {
         switch (level) {
             case Level.VERBOSE:
                 Log.v(tag, msg);
