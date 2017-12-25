@@ -16,6 +16,20 @@ final class FormBody extends RequestBody {
         return new FormBody(namesAndValues);
     }
 
+    public static FormBody create(Parameters namesAndValues, boolean needEncode) {
+        if (!needEncode) {
+            return new FormBody(namesAndValues);
+        }
+        final int size = namesAndValues.size();
+        WritableParameters encoded = WritableParameters.create(size);
+        for (int i = 0; i < size; ++i) {
+            String name = namesAndValues.name(i);
+            String value = namesAndValues.value(i);
+            encoded.add(Utils.smartEncode(name), Utils.smartEncode(value));
+        }
+        return new FormBody(encoded.newReadableParameters());
+    }
+
     private final Parameters namesAndValues;
     private long contentLength = -1L;
 

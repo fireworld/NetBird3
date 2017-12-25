@@ -100,9 +100,9 @@ public class Request {
             return fileBodies.get(0);
         }
         if (!params.isEmpty() && fileBodies.isEmpty()) {
-            return FormBody.create(params);
+            return FormBody.create(params, true);
         }
-        return MultipartBody.create(FormBody.create(params), fileBodies, boundary);
+        return MultipartBody.create(FormBody.create(params, false), fileBodies, boundary);
     }
 
     public final Object tag() {
