@@ -67,11 +67,6 @@ public class LoggingTailInterceptor implements Interceptor {
                     log(Level.INFO, "response content --> " + content);
                     ResponseBody newBody = ResponseBody.create(bytes, contentType);
                     response = response.newBuilder().body(newBody).build();
-
-//                    String content = oldBody.string(defaultCharset);
-//                    log(Level.INFO, "response content --> " + content);
-//                    ResponseBody newBody = ResponseBody.create(content, contentType, oldBody.charset());
-//                    response = response.newBuilder().body(newBody).build();
                 }
             }
             log(Level.INFO, LINE);

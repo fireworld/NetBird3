@@ -9,27 +9,38 @@ import cc.colorcat.netbird3.platform.Logger;
  * xx.ch@outlook.com
  */
 public class AndroidLogger implements Logger {
+    private static final int MAX_LENGTH = 1024 * 2;
 
     @Override
     public void log(@Level int level, String tag, String msg) {
         switch (level) {
             case Level.VERBOSE:
-                Log.v(tag, msg);
+                realPrintln(Log.VERBOSE, tag, msg);
                 break;
             case Level.DEBUG:
-                Log.d(tag, msg);
+                realPrintln(Log.DEBUG, tag, msg);
                 break;
             case Level.INFO:
-                Log.i(tag, msg);
+                realPrintln(Log.INFO, tag, msg);
                 break;
             case Level.WARN:
-                Log.w(tag, msg);
+                realPrintln(Log.WARN, tag, msg);
                 break;
             case Level.ERROR:
-                Log.e(tag, msg);
+                realPrintln(Log.ERROR, tag, msg);
                 break;
             default:
                 break;
+        }
+    }
+
+    private static void realPrintln(int priority, String tag, String msg) {
+        for (int start = 0, end = start + MAX_LENGTH, size = msg.length(); start < size; start = end, end = start + MAX_LENGTH) {
+            if (end > size) {
+                Log.println(priority, tag, msg.substring(start));
+            } else {
+                Log.println(priority, tag, msg.substring(start, end));
+            }
         }
     }
 }
