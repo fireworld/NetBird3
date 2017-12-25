@@ -1,6 +1,5 @@
 package cc.colorcat.netbird3;
 
-import cc.colorcat.netbird3.internal.Level;
 import cc.colorcat.netbird3.platform.GenericPlatform;
 import cc.colorcat.netbird3.platform.Logger;
 import cc.colorcat.netbird3.platform.Scheduler;
@@ -37,6 +36,4 @@ public abstract class Platform {
     public abstract Scheduler scheduler();
 
     public abstract Logger logger();
-
-//    public abstract void log(@Level int level, String tag, String msg);
 }

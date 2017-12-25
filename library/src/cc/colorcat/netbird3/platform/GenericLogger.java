@@ -5,7 +5,6 @@ import cc.colorcat.netbird3.internal.Level;
 
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Formatter;
-import java.util.logging.Handler;
 import java.util.logging.LogRecord;
 
 /**
@@ -13,10 +12,10 @@ import java.util.logging.LogRecord;
  * xx.ch@outlook.com
  */
 public class GenericLogger implements Logger {
-    private final java.util.logging.Logger logger;
+    private static final java.util.logging.Logger LOGGER;
 
-    {
-        logger = java.util.logging.Logger.getLogger(NetBird.class.getSimpleName());
+    static {
+        LOGGER = java.util.logging.Logger.getLogger(NetBird.class.getSimpleName());
         java.util.logging.Level level = java.util.logging.Level.ALL;
         Formatter formatter = new Formatter() {
             @Override
@@ -24,14 +23,12 @@ public class GenericLogger implements Logger {
                 return record.getMessage() + "\n";
             }
         };
-        for (Handler handler : logger.getParent().getHandlers()) {
-            handler.setLevel(java.util.logging.Level.OFF);
-        }
+        LOGGER.setUseParentHandlers(false);
         ConsoleHandler handler = new ConsoleHandler();
         handler.setFormatter(formatter);
         handler.setLevel(level);
-        logger.addHandler(handler);
-        logger.setLevel(level);
+        LOGGER.addHandler(handler);
+        LOGGER.setLevel(level);
     }
 
     @Override
@@ -39,19 +36,19 @@ public class GenericLogger implements Logger {
         String log = tag + " --> " + msg;
         switch (level) {
             case Level.VERBOSE:
-                logger.log(java.util.logging.Level.FINE, log);
+                LOGGER.log(java.util.logging.Level.FINE, log);
                 break;
             case Level.DEBUG:
-                logger.log(java.util.logging.Level.CONFIG, log);
+                LOGGER.log(java.util.logging.Level.CONFIG, log);
                 break;
             case Level.INFO:
-                logger.log(java.util.logging.Level.INFO, log);
+                LOGGER.log(java.util.logging.Level.INFO, log);
                 break;
             case Level.WARN:
-                logger.log(java.util.logging.Level.WARNING, log);
+                LOGGER.log(java.util.logging.Level.WARNING, log);
                 break;
             case Level.ERROR:
-                logger.log(java.util.logging.Level.SEVERE, log);
+                LOGGER.log(java.util.logging.Level.SEVERE, log);
                 break;
             default:
                 break;

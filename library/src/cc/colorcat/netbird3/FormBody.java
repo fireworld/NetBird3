@@ -12,10 +12,6 @@ final class FormBody extends RequestBody {
     private static final String CONTENT_TYPE = "application/x-www-form-urlencoded";
 //    private static final String CONTENT_TYPE = "text/plain; charset=UTF-8";
 
-    public static FormBody create(Parameters namesAndValues) {
-        return new FormBody(namesAndValues);
-    }
-
     public static FormBody create(Parameters namesAndValues, boolean needEncode) {
         if (!needEncode) {
             return new FormBody(namesAndValues);

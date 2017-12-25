@@ -1,7 +1,5 @@
 package cc.colorcat.netbird3.android;
 
-import android.os.Handler;
-import android.os.Looper;
 import cc.colorcat.netbird3.Connection;
 import cc.colorcat.netbird3.Platform;
 import cc.colorcat.netbird3.platform.Logger;
@@ -13,30 +11,22 @@ import cc.colorcat.netbird3.platform.Scheduler;
  * xx.ch@outlook.com
  */
 public class AndroidPlatform extends Platform {
-    private static final Handler HANDLER = new Handler(Looper.getMainLooper());
+    private final Connection connection = new AndroidHttpConnection();
+    private final Scheduler scheduler = new AndroidScheduler();
+    private final Logger logger = new AndroidLogger();
 
     @Override
     public Connection connection() {
-        return new AndroidHttpConnection();
+        return connection;
     }
 
     @Override
     public Scheduler scheduler() {
-        return new Scheduler() {
-            @Override
-            public void onTargetThread(Runnable runnable) {
-                HANDLER.post(runnable);
-            }
-
-            @Override
-            public boolean isTargetThread() {
-                return Looper.myLooper() == Looper.getMainLooper();
-            }
-        };
+        return scheduler;
     }
 
     @Override
     public Logger logger() {
-        return new AndroidLogger();
+        return logger;
     }
 }

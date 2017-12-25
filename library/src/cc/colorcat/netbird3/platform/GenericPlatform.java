@@ -9,28 +9,22 @@ import cc.colorcat.netbird3.Platform;
  * xx.ch@outlook.com
  */
 public final class GenericPlatform extends Platform {
+    private final Connection connection = new HttpConnection();
+    private final Scheduler scheduler = new GenericScheduler();
+    private final Logger logger = new GenericLogger();
+
     @Override
     public Connection connection() {
-        return new HttpConnection();
+        return connection;
     }
 
     @Override
     public Scheduler scheduler() {
-        return new Scheduler() {
-            @Override
-            public void onTargetThread(Runnable runnable) {
-                runnable.run();
-            }
-
-            @Override
-            public boolean isTargetThread() {
-                return true;
-            }
-        };
+        return scheduler;
     }
 
     @Override
     public Logger logger() {
-        return new GenericLogger();
+        return logger;
     }
 }

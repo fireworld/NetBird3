@@ -85,7 +85,7 @@ public class Request {
         return loadListener;
     }
 
-    public final RequestBody body() {
+    final RequestBody body() {
         if (body == null) {
             body = parseBody();
         }
