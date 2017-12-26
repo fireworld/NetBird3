@@ -36,7 +36,7 @@ public class AndroidLogger implements Logger {
 
     private static void println(int priority, String tag, String msg) {
         for (int start = 0, end = start + MAX_LENGTH, size = msg.length(); start < size; start = end, end = start + MAX_LENGTH) {
-            if (end > size) {
+            if (end >= size) {
                 Log.println(priority, tag, msg.substring(start));
             } else {
                 Log.println(priority, tag, msg.substring(start, end));
