@@ -233,6 +233,41 @@ public class Request {
             return method;
         }
 
+        public Builder get() {
+            this.method = Method.GET;
+            return this;
+        }
+
+        public Builder head() {
+            this.method = Method.HEAD;
+            return this;
+        }
+
+        public Builder trace() {
+            this.method = Method.TRACE;
+            return this;
+        }
+
+        public Builder options() {
+            this.method = Method.OPTIONS;
+            return this;
+        }
+
+        public Builder post() {
+            this.method = Method.POST;
+            return this;
+        }
+
+        public Builder put() {
+            this.method = Method.PUT;
+            return this;
+        }
+
+        public Builder delete() {
+            this.method = Method.DELETE;
+            return this;
+        }
+
         /**
          * @param listener 下载进度监听器，服务器必须返回数据的长度才有效
          */

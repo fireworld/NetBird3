@@ -95,6 +95,48 @@ public class MRequest<T> extends Request {
             return this;
         }
 
+        @Override
+        public Builder<T> get() {
+            super.get();
+            return this;
+        }
+
+        @Override
+        public Builder<T> head() {
+            super.head();
+            return this;
+        }
+
+        @Override
+        public Builder<T> trace() {
+            super.trace();
+            return this;
+        }
+
+        @Override
+        public Builder<T> options() {
+            super.options();
+            return this;
+        }
+
+        @Override
+        public Builder<T> post() {
+            super.post();
+            return this;
+        }
+
+        @Override
+        public Builder<T> put() {
+            super.put();
+            return this;
+        }
+
+        @Override
+        public Builder<T> delete() {
+            super.delete();
+            return this;
+        }
+
         public Builder<T> listener(Listener<? super T> listener) {
             this.listener = listener;
             return this;
