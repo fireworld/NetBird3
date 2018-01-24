@@ -76,7 +76,7 @@ public final class ProgressInputStream extends FilterInputStream {
         finished += readCount;
         currentPercent = (int) (finished * 100 / contentLength);
         if (currentPercent > lastPercent) {
-            ScheduleUtils.postProgressOnTargetThread(listener, finished, contentLength, currentPercent);
+            listener.onChanged(finished, contentLength, currentPercent);
             lastPercent = currentPercent;
         }
     }
